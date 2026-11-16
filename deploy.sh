@@ -86,7 +86,7 @@ echo -e "${GREEN}Tebrikler! $TARGET_APP sağlık kontrolünden başarıyla geçt
 
 # Caddy upstream yönlendirmesini güncelle
 echo -e "${YELLOW}Caddy yönlendirmesi $TARGET_APP olarak güncelleniyor...${NC}"
-echo "reverse_proxy $TARGET_APP:8080" > "$CADDY_UPSTREAM_FILE"
+echo "reverse_proxy $TARGET_APP:8080" | sudo tee "$CADDY_UPSTREAM_FILE" > /dev/null
 
 # Caddy'ye sıfır kesintiyle reload emri ver
 if docker ps --format '{{.Names}}' | grep -q "^caddy$"; then

@@ -1,0 +1,21 @@
+"run deployment on server" adımında
+
+out: Yeni dağıtım yapılacak servis: BLUE (app_blue)
+out: En güncel imaj kontrol ediliyor (app_blue)...
+err:  Image ghcr.io/erkandurgut/enguzel:latest Pulling 
+err:  Image ghcr.io/erkandurgut/enguzel:latest Pulled 
+out: app_blue başlatılıyor...
+err:  Container postgres Running 
+err:  Container app_blue Creating 
+err:  Container app_blue Created 
+err:  Container postgres Waiting 
+err:  Container postgres Healthy 
+err:  Container app_blue Starting 
+err:  Container app_blue Started 
+out: app_blue servisinin hazır ve sağlıklı olması bekleniyor...
+out: Sağlık durumu: "starting" (Kontrol 1/30). Bekleniyor...
+out: Sağlık durumu: "starting" (Kontrol 2/30). Bekleniyor...
+out: Tebrikler! app_blue sağlık kontrolünden başarıyla geçti.
+err: ./deploy.sh: line 89: ***/caddy/upstream.caddy: Permission denied
+out: Caddy yönlendirmesi app_blue olarak güncelleniyor...
+2026/11/16 20:51:04 Process exited with status 1

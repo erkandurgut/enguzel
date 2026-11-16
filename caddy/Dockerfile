@@ -1,7 +1,8 @@
 FROM caddy:2-alpine
 
-# Caddyfile yapılandırma dosyasını imaj içerisine kopyala
+# Caddyfile ve upstream yapılandırma dosyasını imaj içerisine kopyala
 COPY Caddyfile /etc/caddy/Caddyfile
+COPY upstream.caddy /etc/caddy/upstream.caddy
 
 # HTTP ve HTTPS portları
 EXPOSE 80

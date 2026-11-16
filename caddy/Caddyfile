@@ -1,6 +1,6 @@
 # enguzelisimler.online ve www.enguzelisimler.online için Dart Backend yapılandırması
 enguzelisimler.online, www.enguzelisimler.online {
-    reverse_proxy app:8080
+    import upstream.caddy
     encode gzip zstd
 }
 

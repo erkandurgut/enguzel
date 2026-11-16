@@ -2,37 +2,77 @@ services:
   # PostgreSQL Veritabanı (Yalnızca iç ağda çalışır)
   postgres:
     image: postgres:16-alpine
+    container_name: postgres
     restart: unless-stopped
     environment:
-      POSTGRES_DB: auth_db
-      POSTGRES_USER: auth_user
-      POSTGRES_PASSWORD: auth_secure_password_2026
+      POSTGRES_DB: ${DB_NAME:-auth_db}
+      POSTGRES_USER: ${DB_USER:-auth_user}
+      POSTGRES_PASSWORD: ${DB_PASSWORD:-auth_secure_password_2026}
     volumes:
       - postgres_data:/var/lib/postgresql/data
     healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U auth_user -d auth_db"]
+      test: ["CMD-SHELL", "pg_isready -U ${DB_USER:-auth_user} -d ${DB_NAME:-auth_db}"]
       interval: 5s
       timeout: 5s
       retries: 5
     networks:
       - app_internal
 
-  # Dart Backend Sunucusu (JWT Auth & API)
-  app:
+  # Dart Backend Sunucusu - Blue (Mavi)
+  app_blue:
+    image: ${APP_IMAGE:-ghcr.io/erkandurgut/enguzel:latest}
     build:
       context: .
       dockerfile: Dockerfile
+    container_name: app_blue
     restart: unless-stopped
     environment:
       PORT: "8080"
       DB_HOST: "postgres"
       DB_PORT: "5432"
-      DB_NAME: "auth_db"
-      DB_USER: "auth_user"
-      DB_PASSWORD: "auth_secure_password_2026"
-      JWT_SECRET: "dart_jwt_super_secret_key_change_in_production_2026_xyz"
+      DB_NAME: ${DB_NAME:-auth_db}
+      DB_USER: ${DB_USER:-auth_user}
+      DB_PASSWORD: ${DB_PASSWORD:-auth_secure_password_2026}
+      JWT_SECRET: ${JWT_SECRET:-dart_jwt_super_secret_key_change_in_production_2026_xyz}
     expose:
       - "8080"
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8080/health"]
+      interval: 3s
+      timeout: 3s
+      retries: 5
+      start_period: 5s
+    depends_on:
+      postgres:
+        condition: service_healthy
+    networks:
+      - app_internal
+      - caddy_net
+
+  # Dart Backend Sunucusu - Green (Yeşil)
+  app_green:
+    image: ${APP_IMAGE:-ghcr.io/erkandurgut/enguzel:latest}
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: app_green
+    restart: unless-stopped
+    environment:
+      PORT: "8080"
+      DB_HOST: "postgres"
+      DB_PORT: "5432"
+      DB_NAME: ${DB_NAME:-auth_db}
+      DB_USER: ${DB_USER:-auth_user}
+      DB_PASSWORD: ${DB_PASSWORD:-auth_secure_password_2026}
+      JWT_SECRET: ${JWT_SECRET:-dart_jwt_super_secret_key_change_in_production_2026_xyz}
+    expose:
+      - "8080"
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8080/health"]
+      interval: 3s
+      timeout: 3s
+      retries: 5
+      start_period: 5s
     depends_on:
       postgres:
         condition: service_healthy

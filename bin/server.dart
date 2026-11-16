@@ -350,6 +350,23 @@ Future<void> main() async {
     });
   });
 
+  // --- SAĞLIK KONTROLÜ (HEALTH CHECK) ---
+  router.get('/health', (Request req) {
+    if (!isDbReady) {
+      return Response(503,
+          body: jsonEncode({'status': 'initializing', 'db': false}),
+          headers: {'content-type': 'application/json'});
+    }
+    return Response.ok(
+      jsonEncode({
+        'status': 'healthy',
+        'db': true,
+        'timestamp': DateTime.now().toIso8601String()
+      }),
+      headers: {'content-type': 'application/json'},
+    );
+  });
+
   // --- ÖN YÜZ: MODERN WEB ARAYÜZÜ (SPA) ---
   router.get('/', (Request req) {
     return Response.ok(

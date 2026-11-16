@@ -14,6 +14,8 @@ services:
     volumes:
       - caddy_data:/data
       - caddy_config:/config
+      - ./Caddyfile:/etc/caddy/Caddyfile
+      - ./upstream.caddy:/etc/caddy/upstream.caddy
     networks:
       - caddy_net
 

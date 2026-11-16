@@ -1,0 +1,14 @@
+# Dart bağımlılıkları ve derleme dosyaları
+.dart_tool/
+.packages
+build/
+bin/server
+bin/*.exe
+
+# Ortam değişkenleri (Gizli anahtarlar)
+.env
+.env.*
+
+# Sistem dosyaları
+.DS_Store
+Thumbs.db

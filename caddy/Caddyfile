@@ -1,0 +1,16 @@
+# enguzelisimler.online ve www.enguzelisimler.online için Dart Backend yapılandırması
+enguzelisimler.online, www.enguzelisimler.online {
+    reverse_proxy app:8080
+    encode gzip zstd
+}
+
+# Portainer Yönetim Paneli
+# Portainer 9443 portunda varsayılan olarak kendinden imzalı (self-signed) SSL kullandığı için
+# Caddy'nin arka plana HTTPS ile bağlanması ve iç sertifika doğrulamasını atlaması gerekir.
+portainer.enguzelisimler.online {
+    reverse_proxy https://host.docker.internal:9443 {
+        transport http {
+            tls_insecure_skip_verify
+        }
+    }
+}

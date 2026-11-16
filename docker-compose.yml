@@ -1,0 +1,49 @@
+services:
+  # PostgreSQL Veritabanı (Yalnızca iç ağda çalışır)
+  postgres:
+    image: postgres:16-alpine
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: auth_db
+      POSTGRES_USER: auth_user
+      POSTGRES_PASSWORD: auth_secure_password_2026
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U auth_user -d auth_db"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+    networks:
+      - app_internal
+
+  # Dart Backend Sunucusu (JWT Auth & API)
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    restart: unless-stopped
+    environment:
+      PORT: "8080"
+      DB_HOST: "postgres"
+      DB_PORT: "5432"
+      DB_NAME: "auth_db"
+      DB_USER: "auth_user"
+      DB_PASSWORD: "auth_secure_password_2026"
+      JWT_SECRET: "dart_jwt_super_secret_key_change_in_production_2026_xyz"
+    expose:
+      - "8080"
+    depends_on:
+      postgres:
+        condition: service_healthy
+    networks:
+      - app_internal
+      - caddy_net
+
+volumes:
+  postgres_data:
+
+networks:
+  app_internal:
+  caddy_net:
+    external: true

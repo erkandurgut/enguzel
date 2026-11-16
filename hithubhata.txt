@@ -1,21 +1,13 @@
-"run deployment on server" adımında
-
-out: Yeni dağıtım yapılacak servis: BLUE (app_blue)
-out: En güncel imaj kontrol ediliyor (app_blue)...
-err:  Image ghcr.io/erkandurgut/enguzel:latest Pulling 
-err:  Image ghcr.io/erkandurgut/enguzel:latest Pulled 
-out: app_blue başlatılıyor...
-err:  Container postgres Running 
-err:  Container app_blue Creating 
-err:  Container app_blue Created 
-err:  Container postgres Waiting 
-err:  Container postgres Healthy 
-err:  Container app_blue Starting 
-err:  Container app_blue Started 
-out: app_blue servisinin hazır ve sağlıklı olması bekleniyor...
-out: Sağlık durumu: "starting" (Kontrol 1/30). Bekleniyor...
-out: Sağlık durumu: "starting" (Kontrol 2/30). Bekleniyor...
-out: Tebrikler! app_blue sağlık kontrolünden başarıyla geçti.
-err: ./deploy.sh: line 89: ***/caddy/upstream.caddy: Permission denied
-out: Caddy yönlendirmesi app_blue olarak güncelleniyor...
-2026/11/16 20:51:04 Process exited with status 1
+ubuntu@freevps1:~/myProject/myProject$ docker inspect --format='{{.State.Status}} | {{json .State.Health.Status}}' app_blue
+running | "healthy"
+ubuntu@freevps1:~/myProject/myProject$ docker inspect --format='{{json .NetworkSettings.Networks}}' app_blue | grep caddy_net
+{"caddy_net":{"IPAMConfig":null,"Links":null,"Aliases":["app_blue","app_blue"],"DriverOpts":null,"GwPriority":0,"NetworkID":"bae8637a797e2878809a194a094cfc10694b7af7a55db261975bb0e72082aaec","EndpointID":"5322c2489884bb0c1426336856c644c7b1f94d9a65940800369681d355a5cd09","Gateway":"172.19.0.1","IPAddress":"172.19.0.4","MacAddress":"7a:9f:3e:97:1a:1b","IPPrefixLen":16,"IPv6Gateway":"","GlobalIPv6Address":"","GlobalIPv6PrefixLen":0,"DNSNames":["app_blue","8692202e7987"]},"enguzel_app_internal":{"IPAMConfig":null,"Links":null,"Aliases":["app_blue","app_blue"],"DriverOpts":null,"GwPriority":0,"NetworkID":"ff9cf10bacf3c80668d3c8cc91bc7323aa484bbbd49d3908bb13194970d93652","EndpointID":"68082c184fdb92acd862bf770fceaaea4f3a2d830a57833de6fe01143e317cd3","Gateway":"172.20.0.1","IPAddress":"172.20.0.3","MacAddress":"0a:9e:d1:93:5f:95","IPPrefixLen":16,"IPv6Gateway":"","GlobalIPv6Address":"","GlobalIPv6PrefixLen":0,"DNSNames":["app_blue","8692202e7987"]}}
+ubuntu@freevps1:~/myProject/myProject$ docker exec caddy wget -qO- http://app_blue:8080/health
+{"status":"healthy","db":true,"timestamp":"2026-11-16T21:24:19.082914"}ubuntu@freevps1:~/myProject/myProject$ cd ..
+ubuntu@freevps1:~/myProject$ cd ..
+ubuntu@freevps1:~$ cd enguzel/
+ubuntu@freevps1:~/enguzel$ ls
+Dockerfile  README.md  auth_system_plan.md  bin  caddy  deploy.sh  docker-compose.yml  hithubhata.txt  pubspec.lock  pubspec.yaml
+ubuntu@freevps1:~/enguzel$ docker exec caddy cat /etc/caddy/upstream.caddy
+cat: can't open '/etc/caddy/upstream.caddy': No such file or directory
+ubuntu@freevps1:~/enguzel$

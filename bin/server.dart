@@ -803,7 +803,7 @@ String _buildIndexHtml() {
 
     const initial = (user.first_name || 'U').charAt(0).toUpperCase();
     document.getElementById('userAvatar').textContent = initial;
-    document.getElementById('welcomeMessage').textContent = `Hoş geldin \${user.first_name} \${user.last_name}`;
+    document.getElementById('welcomeMessage').textContent = `Hoş geldinx \${user.first_name} \${user.last_name}`;
     document.getElementById('displayEmail').textContent = user.email;
   }
 
